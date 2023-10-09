@@ -165,25 +165,40 @@ app.delete('/api/v1/tours/:id', deleteTour);
 */
 //more refactoring IF NEEDED ======================================================================================================================================
 
-app.route('/api/v1/tours').get(getAllTours).post(createTour);
 
-app
-  .route('/api/v1/tours/:id')
+const tourRouter = express.Router();
+const userRouter = express.Router();
+
+tourRouter
+  .route('/')
+  .get(getAllTours)
+  .post(createTour);
+
+tourRouter
+  .route('/:id')
   .get(getTour)
   .patch(updateTour)
   .delete(deleteTour);
 
 //implementing Users Routes ======================================================================================================================================
-app
-  .route('/api/v1/users')
+userRouter
+  .route('/')
   .get(getAllUsers)
   .post(createUser);
   
-app
-  .route('api/v1/users/:id')
+userRouter
+  .route('/:id')
   .get(getUser)
   .patch(updateUser)
   .delete(deleteUser);  
+
+
+  
+//MOUNTING ROUTERS ======================================================================
+
+app.use('/api/v1/tours', tourRouter);
+app.use('/api/v1/users', userRouter);
+
 
 // starting a server on port 3000 // ==============================================================================================
 const port = 3000;
