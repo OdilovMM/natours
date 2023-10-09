@@ -10,10 +10,9 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
-//tours routing
+//REFACTORING ROUTES =========================================================================================================================
 
-//GET METHOD ================================================= Getting all tours ====================================================
-app.get('/api/v1/tours', (req, res) => {
+const getAllTours = (req, res) => {
   res.status(200).json({
     status: 'success',
     result: tours.length,
@@ -21,11 +20,9 @@ app.get('/api/v1/tours', (req, res) => {
       tours: tours,
     },
   });
-});
+};
 
-//URL PARAMETRS ========================================================= getting one tour via id ==========================================================
-
-app.get('/api/v1/tours/:id', (req, res) => {
+const getTour = (req, res) => {
   console.log(req.params);
   const id = req.params.id * 1;
   const tour = tours.find((el) => el.id === id);
@@ -45,11 +42,9 @@ app.get('/api/v1/tours/:id', (req, res) => {
       tours: tour,
     },
   });
-});
+};
 
-//POST METHOD ========================================== to create a new tour ==============================================================================
-
-app.post('/api/v1/tours', (req, res) => {
+const createTour = (req, res) => {
   // console.log(req.body);
 
   const newId = tours[tours.length - 1].id + 1;
@@ -68,12 +63,9 @@ app.post('/api/v1/tours', (req, res) => {
       });
     }
   );
-});
+};
 
-//PATCH ================================================== update data using PATCH  ===============================================
-/*
-
-app.patch('/api/v1/tours/:id', (req, res) => {
+const updateTour = (req, res) => {
   if (req.params.id * 1 > tours.length) {
     return res.status(404).json({
       status: 'fail',
@@ -87,15 +79,9 @@ app.patch('/api/v1/tours/:id', (req, res) => {
       tour: '<Updated tour here...>',
     },
   });
-});
+};
 
-*/
-
-
-//DELETE ============================================== Delete ======================================================================
-
-
-app.delete('/api/v1/tours/:id', (req, res) => {
+const deleteTour = (req, res) => {
   if (req.params.id * 1 > tours.length) {
     return res.status(404).json({
       status: 'fail',
@@ -105,11 +91,35 @@ app.delete('/api/v1/tours/:id', (req, res) => {
 
   res.status(204).json({
     status: 'success',
-    data: null
+    data: null,
   });
-});
+};
 
+//tours routing
 
+//GET METHOD ================================================= Getting all tours ====================================================
+app.get('/api/v1/tours', getAllTours);
+
+//URL PARAMETRS ========================================================= getting one tour via id ==========================================================
+app.get('/api/v1/tours/:id', getTour);
+
+//POST METHOD ========================================== to create a new tour ==============================================================================
+app.post('/api/v1/tours', createTour);
+
+//PATCH ================================================== update data using PATCH  ===============================================
+app.patch('/api/v1/tours/:id', updateTour);
+
+//DELETE ============================================== Delete ======================================================================
+app.delete('/api/v1/tours/:id', deleteTour);
+
+//more refactoring ==========================================================================================================================================
+
+app.route('/api/v1/tours').get(getAllTours).post(createTour);
+app
+  .route('/api/v1/tours/:id')
+  .get(getTour)
+  .patch(updateTour)
+  .delete(deleteTour);
 
 // starting a server on port 3000 // ==============================================================================================
 const port = 3000;
