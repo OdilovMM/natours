@@ -5,6 +5,17 @@ const app = express();
 // =============================================== Middleware to handle incoming function ============================================
 app.use(express.json());
 
+//create our own middleware ================================================================
+app.use((req, res, next) => {
+  console.log('Hello from the middleware');
+  next();
+});
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next()
+});
+
 //reading tours data
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
@@ -13,8 +24,10 @@ const tours = JSON.parse(
 //REFACTORING ROUTES =========================================================================================================================
 
 const getAllTours = (req, res) => {
+  console.log(req.requestTime)
   res.status(200).json({
     status: 'success',
+    requestedAt: req.requestTime,
     result: tours.length,
     data: {
       tours: tours,
@@ -96,7 +109,7 @@ const deleteTour = (req, res) => {
 };
 
 //tours routing
-
+/*
 //GET METHOD ================================================= Getting all tours ====================================================
 app.get('/api/v1/tours', getAllTours);
 
@@ -111,10 +124,11 @@ app.patch('/api/v1/tours/:id', updateTour);
 
 //DELETE ============================================== Delete ======================================================================
 app.delete('/api/v1/tours/:id', deleteTour);
-
-//more refactoring ==========================================================================================================================================
+*/
+//more refactoring IF NEEDED ======================================================================================================================================
 
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
+
 app
   .route('/api/v1/tours/:id')
   .get(getTour)
