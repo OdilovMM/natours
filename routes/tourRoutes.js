@@ -5,10 +5,13 @@ const router = express.Router();
 // ADDING PARAMETERS to ID
 router.param('id', tourController.checkID);
 
+
+//create a checkBody middleware function
+
 router
   .route('/')
   .get(tourController.getAllTours)
-  .post(tourController.createTour);
+  .post(tourController.checkBody, tourController.createTour);
 
 router
   .route('/:id')
