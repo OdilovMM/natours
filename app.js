@@ -1,8 +1,11 @@
 const express = require('express');
 const fs = require('fs');
+const morgan = require('morgan');
+
 const app = express();
 
 // =============================================== Middleware to handle incoming function ============================================
+app.use(morgan('dev'));
 app.use(express.json());
 
 //create our own middleware ================================================================
@@ -13,7 +16,7 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  next()
+  next();
 });
 
 //reading tours data
@@ -24,7 +27,7 @@ const tours = JSON.parse(
 //REFACTORING ROUTES =========================================================================================================================
 
 const getAllTours = (req, res) => {
-  console.log(req.requestTime)
+  console.log(req.requestTime);
   res.status(200).json({
     status: 'success',
     requestedAt: req.requestTime,
