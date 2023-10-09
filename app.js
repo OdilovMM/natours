@@ -8,6 +8,10 @@ const app = express();
 app.use(morgan('dev')); // morgan logger
 app.use(express.json());
 
+//setting up static file
+
+app.use(express.static(`${__dirname}/public`))
+
 //create our own middleware ================================================================
 app.use((req, res, next) => {
   console.log('Hello from the middleware');
