@@ -2,7 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 
-//Middleware to handle incoming function ===========================================================================================
+// =============================================== Middleware to handle incoming function ============================================
 app.use(express.json());
 
 //reading tours data
@@ -12,7 +12,7 @@ const tours = JSON.parse(
 
 //tours routing
 
-//GET METHOD ======================================================================================================================
+//GET METHOD ================================================= Getting all tours ====================================================
 app.get('/api/v1/tours', (req, res) => {
   res.status(200).json({
     status: 'success',
@@ -23,9 +23,31 @@ app.get('/api/v1/tours', (req, res) => {
   });
 });
 
-//POST METHOD ====================================================================================================================
+//URL PARAMETRS ========================================================= getting one tour via id ==========================================================
 
-//to create a new tour
+app.get('/api/v1/tours/:id', (req, res) => {
+  console.log(req.params);
+  const id = req.params.id * 1;
+  const tour = tours.find((el) => el.id === id);
+
+  // if (id > tours.length) 
+  if (!tour){
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid Id',
+    });
+  }
+
+  res.status(200).json({
+    status: 'success',
+
+    data: {
+      tours: tour,
+    },
+  });
+});
+
+//POST METHOD ========================================== to create a new tour ==============================================================================
 
 app.post('/api/v1/tours', (req, res) => {
   // console.log(req.body);
