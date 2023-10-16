@@ -39,7 +39,21 @@ const tourSchema = new mongoose.Schema({
 // creating a model based on the schema
 const Tour = mongoose.model('Tour', tourSchema);
 
-// console.log(process.env);
+// function construction %% classes -- instance of a Tour model
+const testTour = new Tour({
+  name: 'The Fordest Hiker',
+  rating: 4.8,
+  price: 496,
+});
+
+testTour
+  .save()
+  .then((doc) => {
+    console.log(doc);
+  })
+  .catch((err) => {
+    console.log('ERROR!!!:', err);
+  });
 
 // starting a server on port 3000 // ==============================================================================================
 const port = process.env.PORT || 3000;
